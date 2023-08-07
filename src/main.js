@@ -9,3 +9,4 @@
 // Vite 환경: 파일 확장자 생략 가능
 
 import './FP/chapters/00-programming-paradigm.js';
+import './style/main.css';

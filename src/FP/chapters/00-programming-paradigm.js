@@ -7,8 +7,9 @@
 
 
 // --------------------------------------------------------------------------
-// 명령형 프로그래밍
 
+
+//& 명령형 프로그래밍
 const courses = [
   {
     id: 1,
@@ -21,18 +22,19 @@ const courses = [
 ];
 
 console.log('원본 데이터\n', courses);
-// 1. 과정 배열을 순환하여 각 과정 이름의 좌우 공백 제거
-// 2. 과정 배열을 순환하여 각 과정 이름 대문자화
+
+//^ 1. 과정 배열을 순환하여 각 과정 이름의 좌우 공백 제거
+//^ 2. 과정 배열을 순환하여 각 과정 이름 대문자화
 
 // ES2015(v6)
-// [전개구문(spread syntax)]을 사용하면 배열을 복사할 수 있다.
+//! [전개구문(spread syntax)]을 사용하면 배열을 복사할 수 있다.
 // 얕은 복사 (shallow copy)
 let updateCourses = [...courses];
 
+
+
 //@ [기능 1]. 좌우 공백 제거
-// 명령형으로 프로그래밍 한다.
-// C, JAVA 문법
-// for문
+// 명령형으로 프로그래밍 한다. // C, JAVA 문법 // for문
 for (let i = 0, l=updateCourses.length; i < l; i++) {
   // 객체 복제는 어떻게???
   // [전개구문(spread syntax)]을 사용한다.
@@ -63,7 +65,7 @@ console.assert(!Object.is(courses, updateCourses), '🎯 courses와 updateCourse
 
 
 // --------------------------------------------------------------------------
-// 선언형 프로그래밍
+//& 선언형 프로그래밍
 
 const subjects = [
   {
@@ -78,7 +80,7 @@ const subjects = [
 
 console.log('원본 데이터\n', subjects);
 
-// 1. 객체 이름(name) 속성 좌우 공백 제거 함수 선언
+//@ 1. 객체 이름(name) 속성 좌우 공백 제거 함수 선언
 function toTrim(object) {
   const o = {...object};
   o.name = o.name.trim();
@@ -88,14 +90,14 @@ function toTrim(object) {
 // console.log(toTrim(subjects[0]));
 // console.log(toTrim(subjects[1]));
 
-// 2. 객체 이름(name) 속성 대문자화 함수 선언
+//@ 2. 객체 이름(name) 속성 대문자화 함수 선언
 function toUpperCase(object) {
   const o = {... object}
   o.name = o.name.toUpperCase();
   return o;
 }
 
-// 3. 배열 원소의 `name` 속성의 고앱ㄱ을 밑줄(_)로 변경하는 기능 추가
+//@ 3. 배열 원소의 `name` 속성의 공백을 밑줄(_)로 변경하는 기능 추가
 // 선언형 프로그램이 방식으로
 function ToUnderscore(object) {
   const o = {... object};
@@ -132,12 +134,94 @@ console.log('업데이트 데이터\n', updateSubjects);
 // --------------------------------------------------------------------------
 // JavaScript 프로그래밍 패러다임
 // → 함수(function)를 사용해 구현합니다.
+                                          //! defaultOptions
+function createCountUpButton(container, { count: initialCount = 0, step = 1, max = 100 } = {}) {
+  if(!container || container.nodeType !== document.ELEMENT_NODE) {
+    throw new Error('container는 문서의 요소가 아닙니다.');
+  }
+
+  console.log({initialCount, step});
+
+  let count = initialCount;
+
+  const countUpButton = document.createElement('button');
+
+  const render = (newCount) => {
+    countUpButton.textContent = String(newCount);
+  }
+
+  const handleCountUp = (e) => {
+    console.log('clicked button');
+    count += step;
+    if(max < count) {
+      throw new Error('이제 못 누름~');
+    }
+    render(count);
+    // e.target.textContent = String(count); // render함수로 바꿔주었음
+  }
+
+  countUpButton.setAttribute('type', 'button');
+  countUpButton.classList.add('CountUpButton');
+  
+  countUpButton.addEventListener('click', handleCountUp);
+
+
+  render(count);
+  // countUpButton.textContent = String(count); // render함수로 바꿔주었음
+
+  container.append(countUpButton);
+}
+
+const demoContainer = document.getElementById('demo')
+
+//# 재사용을 목적으로 하는 컴포넌트 (함수로 구현)
+//# 기본 옵션 : { count:0, step: 1, max = 10} 
+createCountUpButton(demoContainer);
+createCountUpButton(demoContainer, { count: 1 }/* 사용자 정의 옵션 */);
+createCountUpButton(demoContainer, { count: 2 });
+createCountUpButton(demoContainer, { count: 3, step: 12, max: 150});
+
+//% 과제
+//% `max` prop을 추가하고, count값이 max보다 커지면 사용자가 더 이상 버튼을 누를 수 없도록 막는다.
+//% `max` prop을 추가하고, count값이 max보다 커지면 화면의 카운트는 버튼을 눌러도 max 값에 머무른다.
 
 
 // --------------------------------------------------------------------------
 // JavaScript 프로그래밍 패러다임
 // → 클래스(class)를 사용해 구현합니다. (참고: https://mzl.la/3QrTKlF)
 
+// 붕어빵틀(생성자함수 : 클래스)
+class CountUpButton {
+  #config;
+
+  constructor(userOptions) {
+    console.log(CountUpButton.defaultProps);
+    console.log(userOptions);
+    this.#config = { ...CountUpButton.defaultProps, ...userOptions };
+    this.init();
+  }
+
+  init() {
+    console.log(this.#config);
+  }
+
+  // static field
+  static defaultProps = { 
+    count: 0, 
+    step: 1, 
+  };
+  
+}
+
+// 새로운(new) 붕어빵 (객체: 인스턴스) 생성
+const firstCountUp = new CountUpButton({
+  count: 2,
+  step: 7
+});
+
+// const demoContainer = document.getElementById('demo')
+
+// demoContainer.append(firstCountUp.render())
 
 // --------------------------------------------------------------------------
 // 웹 컴포넌트(Web Components) API
