@@ -7,6 +7,8 @@
 // - 변하지 않는 변수에 대한 함수를 작성합니다.
 // --------------------------------------------------------------------------
 
+// Node.js (Deno) runtime 
+// Web browser runtime
 
 const dummyDocument = {
   body: {
@@ -23,26 +25,6 @@ function fetchAndRenderAndLogAlbumList() {
   fetch('https://jsonplaceholder.typicode.com/album/1/photos?_start=0&_limit=4')
     .then((response) => response.json())
     .then((data) => {
-      dummyDocument.body.innerHTML = `
-        <ul class="albumList">
-          ${data
-            .map(
-              ({ albumId, id, title, url, thumbnailUrl }) => 
-              `
-                <li class="albumItem">
-                  <a class="albumLink" href="${url}">
-                    <img class="albumThumbnail" src="${thumbnailUrl}" alt="" />
-                    <div role="group" class="albumInfo">
-                      <strong class="albumTitle">${title}</strong>
-                      <span class="albumId">${albumId}</span>
-                    </div>
-                  </a>
-                </li>
-              `
-            )
-            .join('')}
-        </ul>
-      `;
 
       console.log(dummyDocument.body.innerHTML);
     })
@@ -57,8 +39,6 @@ function fetchAndRenderAndLogAlbumList() {
 // - 위 함수 로직을 단 하나의 기능에 집중하도록 분리 구성해봅니다.
 
 function fetchData(endpoint) {
-  console.log('fetch data');
-
   // Promise
   return fetch(endpoint)
     .then((response) => response.json())
@@ -69,8 +49,6 @@ function renderAlbumList(data, container) {
   container.innerHTML = `
     <ul class="albumList">
       ${data
-        // list rendering
-        // render lists
         .map(
           ({ albumId, id, title, url, thumbnailUrl }) => 
           `
@@ -89,24 +67,24 @@ function renderAlbumList(data, container) {
     </ul>
   `;
 
-  return container;
+  // return container;
 }
 
 function log(container) {
-  console.log(container);
+  console.log(container.outerHTML);
 }
 
-
 async function run() {
-  //% 1. 데이터 패치(가져오기)
+  // 데이터 패치(가져오기)
   const responseData = await fetchData(
     'https://jsonplaceholder.typicode.com/album/1/photos?_start=0&_limit=4'
-    );
+  );
+  
+  // 데이터 기반 렌더링
+  const container = document.getElementById('demo');
+  renderAlbumList(responseData, container);
 
-  //% 2. 데이터 기반 렌더링
-  const container = renderAlbumList(responseData, document.getElementById('demo'));
-
-  //% 3. 로그
+  // 로그
   log(container);
 }
 
@@ -120,7 +98,7 @@ run();
 const initialArray = ['c', 'd', 'a', 'e', 'b'];
 
 // 정렬 함수를 구현합니다.
-// sortBy<T>(data: T[], type: 'asc' | 'desc' = 'asc') => T[]
+// interface → sortBy<T>(data: T[], type: 'asc' | 'desc' = 'asc') => T[]
 function sortBy(data) {
   return data;
 }

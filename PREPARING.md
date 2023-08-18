@@ -4,9 +4,9 @@
 
 - [x] [Git v2+](https://git-scm.com/)
 - [x] [Node.js v18+](https://nodejs.dev/en/)
-- [x] [PNPM v8+](https://pnpm.io/ko/)
-- [x] [degit v2+](https://github.com/Rich-Harris/degit#readme)
-- [x] [React Devtools](https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi)
+- [ ] [PNPM v8+](https://pnpm.io/ko/)
+- [ ] [degit v2+](https://github.com/Rich-Harris/degit#readme)
+- [ ] [React Devtools](https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi)
 
 ## 프리페이링 실습
 
